@@ -1,4 +1,4 @@
-# Lab: SQL Injection — ListingDatabase Contents (Non-Oracle)
+# Lab: SQL Injection — Listing Database Contents (Non-Oracle)
 
 **Platform:** PortSwigger Web Security Academy  
 **Category:** SQL Injection — UNION Attacks  
