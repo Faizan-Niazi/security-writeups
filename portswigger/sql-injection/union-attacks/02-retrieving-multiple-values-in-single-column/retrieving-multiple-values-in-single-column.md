@@ -32,7 +32,7 @@ First, we identify how many columns are returned by the original query using the
 
 **Result:** The original query returns exactly **2 columns**.
 
-![Order BY 2 Test](../images/union-attacks/01mul_val_single_column.jpg)
+![Order BY 2 Test](images/01mul_val_single_column.jpg)
 
 ### Step 2: Retrieve Multiple Values in a Single Column
 
@@ -52,7 +52,7 @@ The `||` operator concatenates strings together. The query combines username and
 
 **Result:** The query returns all users with their credentials in the format: `username password`
 
-![UNION SELECT with Concatenation](../images/union-attacks/02mul_val_single_column.jpg)
+![UNION SELECT with Concatenation](images/02mul_val_single_column.jpg)
 
 ### Step 3: Extract Credentials and Authenticate
 
@@ -70,7 +70,7 @@ Using the administrator credentials:
 
 Successfully authenticate as the administrator user and complete the lab.
 
-![Lab Solved - Administrator Login](../images/union-attacks/03mul_val_single_column.jpg)
+![Lab Solved - Administrator Login](images/03mul_val_single_column.jpg)
 
 ## Lab Completion
 

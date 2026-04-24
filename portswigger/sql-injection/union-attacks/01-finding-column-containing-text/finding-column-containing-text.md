@@ -32,7 +32,7 @@ First, we need to find out how many columns are returned by the original query. 
 
 **Result:** The query succeeds with 3 columns, meaning the original query returns exactly **3 columns**.
 
-![Order by 3 test](../images/union-attacks/01_finding_a_column.jpg)
+![Order by 3 test](images/01_finding_a_column.jpg)
 
 ### Step 2: Identify Columns Compatible with String Data
 
@@ -57,7 +57,7 @@ This tests if a UNION statement is possible and checks the data types. We use `n
 
 **Result:** The query executes successfully with the string value appearing in the results, indicating that **Column 2 is compatible with string data**.
 
-![UNION SELECT Result](../images/union-attacks/02_finding_a_column.jpg)
+![UNION SELECT Result](images/02_finding_a_column.jpg)
 
 ## Lab Completion
 
